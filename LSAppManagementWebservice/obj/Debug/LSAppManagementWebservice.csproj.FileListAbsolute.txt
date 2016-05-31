@@ -52,4 +52,3 @@ C:\github_OU\LSAppManagementWebservice\LSAppManagementWebservice\bin\Microsoft.O
 C:\github_OU\LSAppManagementWebservice\LSAppManagementWebservice\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\github_OU\LSAppManagementWebservice\LSAppManagementWebservice\obj\Debug\LSAppManagementWebservice.dll
 C:\github_OU\LSAppManagementWebservice\LSAppManagementWebservice\obj\Debug\LSAppManagementWebservice.pdb
-C:\github_OU\LSAppManagementWebservice\LSAppManagementWebservice\obj\Debug\LSAppManagementWebservice.csprojResolveAssemblyReference.cache

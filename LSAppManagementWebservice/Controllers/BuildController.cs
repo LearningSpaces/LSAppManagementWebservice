@@ -16,6 +16,8 @@ namespace LSAppManagementWebservice.Controllers
         //[HttpPost]
         public ActionResult Add(int ID, string SHA1)
         {
+            string AppPath = "";
+
             try
             {
                 using (var db = DbFactory.getAppDb())
@@ -26,7 +28,7 @@ namespace LSAppManagementWebservice.Controllers
                         throw new Exception("App with id " + ID + " not found");
                     }
 
-                    string AppPath = @"C:/inetpub\DOTNET\" + app.Name;
+                    AppPath = @"C:/inetpub\DOTNET\" + app.Name;
 
                     if (Directory.Exists(AppPath))
                     {
@@ -96,6 +98,11 @@ namespace LSAppManagementWebservice.Controllers
             }
             catch (Exception e)
             {
+                if (Directory.Exists(AppPath + "_Old"))
+                {
+                    Directory.Delete(AppPath, true);
+                    Directory.Move(AppPath + "_Old", AppPath);
+                }
                 Logger.Med("Pull and Build Failed:\n" + e.ToString() + "\n" + e.StackTrace);
                 return Json(new {
                     msg = "failed",
