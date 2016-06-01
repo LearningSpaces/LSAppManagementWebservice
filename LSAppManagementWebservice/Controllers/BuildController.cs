@@ -95,9 +95,9 @@ namespace LSAppManagementWebservice.Controllers
                         Logger.Info(output);
                     }
 
-                    if (!IISHelper.AppExists("Default Web Site", app.Name))
+                    if (!IISHelper.AppExists("LS Web Site", app.Name))
                     {
-                        IISHelper.AddApp("Default Web Site", app.Name, app.WebappPath, @"C:\inetpub\DOTNET\builds\" + app.Name + @"\");
+                        IISHelper.AddApp("LS Web Site", app.Name, app.WebappPath, @"C:\inetpub\DOTNET\builds\" + app.Name + @"\");
                     }
                 }
             }
