@@ -32,12 +32,7 @@ namespace LSAppManagementWebservice.Controllers
 
                     if (Directory.Exists(AppPath))
                     {
-                        if (Directory.Exists(AppPath + "_Old"))
-                        {
-                            Directory.Delete(AppPath + "_Old", true);
-                        }
-
-                        Directory.Move(AppPath, AppPath + "_Old");
+                        Directory.Delete(AppPath, true);
                     }
 
                     ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -54,7 +49,7 @@ namespace LSAppManagementWebservice.Controllers
                         var error = Proc.StandardError.ReadToEnd();
                         Proc.WaitForExit();
                         
-                        if (Proc.ExitCode > 1) {
+                        if (Proc.ExitCode > 0) {
                             throw new Exception(error);
                         }
                         Logger.Info(output);
@@ -68,41 +63,46 @@ namespace LSAppManagementWebservice.Controllers
                         var output = Proc.StandardOutput.ReadToEnd();
                         var error = Proc.StandardError.ReadToEnd();
                         Proc.WaitForExit();
-                        if (Proc.ExitCode > 1)
+                        if (Proc.ExitCode > 0)
                         {
                             throw new Exception(error);
                         }
                         Logger.Info(output);
                     }
 
-                    startInfo.FileName = @"C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe";
-                    startInfo.Arguments = "\"" + AppPath + @"\" + app.Name + ".sln\"" + @" /t:Build /p:Configuration=Release /p:TargetFramework=v4.0";
+                    if (Directory.Exists(AppPath + @"\packages\"))
+                    {
+                        Directory.Delete(AppPath + @"\packages\", true);
+                    }
+
+                    if (System.IO.File.Exists(AppPath + @"\.nuget\Nuget.exe")) 
+                    {
+                        System.IO.File.Delete(AppPath + @"\.nuget\Nuget.exe");
+                    }
+
+                    startInfo.FileName = "msbuild";
+                    startInfo.Arguments = "\"" + AppPath + @"\" + app.Name + ".sln\"" + @" /p:DeployOnBuild=true;PublishProfile=C:\inetpub\DOTNET\filesystem_publish.pubxml;Configuration=Release";
 
                     using (Process Proc = Process.Start(startInfo))
                     {
                         var output = Proc.StandardOutput.ReadToEnd();
                         var error = Proc.StandardError.ReadToEnd();
                         Proc.WaitForExit();
-                        if (Proc.ExitCode > 1)
+                        if (Proc.ExitCode > 0)
                         {
                             throw new Exception(error);
                         }
                         Logger.Info(output);
                     }
 
-                    if (Directory.Exists(AppPath + "_Old"))
+                    if (!IISHelper.AppExists("Default Web Site", app.Name))
                     {
-                        Directory.Delete(AppPath + "_Old", true);
+                        IISHelper.AddApp("Default Web Site", app.Name, app.WebappPath, @"C:\inetpub\DOTNET\builds\" + app.Name + @"\");
                     }
                 }
             }
             catch (Exception e)
             {
-                if (Directory.Exists(AppPath + "_Old"))
-                {
-                    Directory.Delete(AppPath, true);
-                    Directory.Move(AppPath + "_Old", AppPath);
-                }
                 Logger.Med("Pull and Build Failed:\n" + e.ToString() + "\n" + e.StackTrace);
                 return Json(new {
                     msg = "failed",
@@ -110,6 +110,19 @@ namespace LSAppManagementWebservice.Controllers
                     stack = e.StackTrace
                 }, JsonRequestBehavior.AllowGet);
             }
+
+            try
+            {
+                if (Directory.Exists(AppPath))
+                {
+                    Directory.Delete(AppPath, true);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Med("Error deleting pull directory:\n" + e.ToString() + "\n" + e.StackTrace);
+            }
+
             Logger.Info("Pull and Build Success");
             return Json(new {
                 msg = "success"

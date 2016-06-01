@@ -30,6 +30,7 @@ namespace LSAppManagementWebservice.Models.DB
         public int ID { get; set; }
 
         public bool Deleted { get; set; }
+        [Column("ProjectName")]
         public string Name { get; set; }
         public string GithubRepository { get; set; }
         public string WebappPath { get; set; }
