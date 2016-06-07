@@ -167,6 +167,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AppBuildHelper.cs" />
     <Compile Include="Helpers\DbFactory.cs" />
     <Compile Include="Helpers\IISHelper.cs" />
     <Compile Include="Helpers\Logger.cs" />
