@@ -125,7 +125,7 @@ namespace LSAppManagementWebservice.Helpers
                 string fileName = Dir.FullName;
 
                 Process tool = new Process();
-                tool.StartInfo.FileName = "C:\handle.exe";
+                tool.StartInfo.FileName = @"C:\handle.exe";
                 tool.StartInfo.Arguments = fileName + " /accepteula";
                 tool.StartInfo.UseShellExecute = false;
                 tool.StartInfo.RedirectStandardOutput = true;
