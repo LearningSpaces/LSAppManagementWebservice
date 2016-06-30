@@ -91,7 +91,7 @@ namespace LSAppManagementWebservice.Helpers
             startInfo.RedirectStandardOutput = true;
             startInfo.RedirectStandardError = true;
             startInfo.FileName = "msbuild";
-            startInfo.Arguments = "\"" + AppPath + @"\" + app.Name + ".sln\"" + @" /p:DeployOnBuild=true;PublishProfile=C:\inetpub\DOTNET\filesystem_publish.pubxml;Configuration=Release";
+            startInfo.Arguments = "\"" + AppPath + @"\" + app.Name + ".sln\"" + @" /p:DeployOnBuild=true;PublishProfile=C:\inetpub\DOTNET\filesystem_publish.pubxml;Configuration=Release;VisualStudioVersion=12.0";
 
             using (Process Proc = Process.Start(startInfo))
             {
@@ -125,7 +125,7 @@ namespace LSAppManagementWebservice.Helpers
                 string fileName = Dir.FullName;
 
                 Process tool = new Process();
-                tool.StartInfo.FileName = Environment.CurrentDirectory + "/handle.exe";
+                tool.StartInfo.FileName = "C:\handle.exe";
                 tool.StartInfo.Arguments = fileName + " /accepteula";
                 tool.StartInfo.UseShellExecute = false;
                 tool.StartInfo.RedirectStandardOutput = true;
