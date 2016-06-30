@@ -54,7 +54,7 @@ namespace LSAppManagementWebservice.Controllers
             {
                 if (Directory.Exists(AppPath))
                 {
-                    Directory.Delete(AppPath, true);
+                    AppBuildHelper.Delete(new DirectoryInfo(AppPath));
                 }
             }
             catch (Exception e)
@@ -141,7 +141,7 @@ namespace LSAppManagementWebservice.Controllers
             {
                 if (Directory.Exists(AppPath))
                 {
-                    Directory.Delete(AppPath, true);
+                    AppBuildHelper.Delete(new DirectoryInfo(AppPath));
                 }
             }
             catch (Exception e)
